@@ -185,8 +185,19 @@ if __name__ == "__main__":
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
 
-    # Auto-detect the CSV file downloaded from Kaggle
-    csv_files = [f for f in os.listdir(upload_dir) if f.endswith(".csv")]
+    # Recursively find any CSV file in the upload/ directory
+csv_files = []
+for root, dirs, files in os.walk(upload_dir):
+    for f in files:
+        if f.endswith(".csv"):
+            csv_files.append(os.path.join(root, f))
+
+if not csv_files:
+    raise FileNotFoundError("❌ No CSV file found in 'upload/' after downloading from Kaggle.")
+
+existing_data_filename = csv_files[0]
+print(f"✅ Using dataset file: {existing_data_filename}")
+output_filename = existing_data_filename
     
     if not csv_files:
         raise FileNotFoundError("❌ No CSV file found in 'upload/' after downloading from Kaggle.")
