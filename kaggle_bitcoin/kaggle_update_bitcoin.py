@@ -187,8 +187,10 @@ if __name__ == "__main__":
 
     # Auto-detect the CSV file downloaded from Kaggle
     csv_files = [f for f in os.listdir(upload_dir) if f.endswith(".csv")]
-        if not csv_files:
+    
+    if not csv_files:
         raise FileNotFoundError("❌ No CSV file found in 'upload/' after downloading from Kaggle.")
+        
     existing_data_filename = os.path.join(upload_dir, csv_files[0])
     print(f"✅ Using dataset file: {existing_data_filename}")
 
