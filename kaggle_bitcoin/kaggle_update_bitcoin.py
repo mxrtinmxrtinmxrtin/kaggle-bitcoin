@@ -8,7 +8,7 @@ import requests
 
 
 # Function to fetch data from Bitstamp API
-def fetch_bitstamp_data(currency_pair, start_timestamp, end_timestamp, step=60, limit=1000):
+def fetch_bitstamp_data(currency_pair, start_timestamp, end_timestamp, step=86400, limit=1000):
     url = f"https://www.bitstamp.net/api/v2/ohlc/{currency_pair}/"
     params = {
         "step": step,
@@ -67,7 +67,7 @@ def fetch_and_append_missing_data(currency_pair, last_timestamp, current_timesta
     all_new_data = []
     for i, (chunk_start, chunk_end) in enumerate(time_chunks):
         print(f"Fetching chunk {i+1}/{len(time_chunks)}: {datetime.fromtimestamp(chunk_start, tz=timezone.utc)} → {datetime.fromtimestamp(chunk_end, tz=timezone.utc)}")
-        chunk_data = fetch_bitstamp_data(currency_pair, chunk_start, chunk_end, step=60)
+        chunk_data = fetch_bitstamp_data(currency_pair, chunk_start, chunk_end, step=86400)
         if chunk_data:
             df_chunk = pd.DataFrame(chunk_data)
             df_chunk["timestamp"] = pd.to_numeric(df_chunk["timestamp"], errors="coerce")
