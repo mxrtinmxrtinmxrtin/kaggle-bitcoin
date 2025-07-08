@@ -34,6 +34,9 @@ jobs:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
+      - name: Debug Kaggle Auth
+        run: uv run kaggle datasets list -s btc
+        
       - name: Run data processing script
         run: uv run python kaggle_bitcoin/kaggle_update_bitcoin.py
 
