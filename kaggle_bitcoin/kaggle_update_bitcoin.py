@@ -185,8 +185,14 @@ if __name__ == "__main__":
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
 
-    existing_data_filename = os.path.join(
-        upload_dir, "btc-price.csv"
+    # Auto-detect the CSV file downloaded from Kaggle
+    csv_files = [f for f in os.listdir(upload_dir) if f.endswith(".csv")]
+        if not csv_files:
+        raise FileNotFoundError("❌ No CSV file found in 'upload/' after downloading from Kaggle.")
+    existing_data_filename = os.path.join(upload_dir, csv_files[0])
+    print(f"✅ Using dataset file: {existing_data_filename}")
+
+     
     )  # The dataset file
     output_filename = existing_data_filename  # Output filename (same as the dataset name on Kaggle)
 
