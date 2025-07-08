@@ -177,7 +177,7 @@ def fetch_and_append_missing_data(
 
 # Main execution
 if __name__ == "__main__":
-    dataset_slug = "mczielinski/bitcoin-historical-data"  # Kaggle dataset slug
+    dataset_slug = "martintorres54/btc-price"  # Kaggle dataset slug
     currency_pair = "btcusd"
     upload_dir = "upload"
 
@@ -191,11 +191,6 @@ if __name__ == "__main__":
     output_filename = existing_data_filename  # Output filename (same as the dataset name on Kaggle)
 
     print(f"Current time (UTC): {datetime.now(timezone.utc)}")
-    
-    # Step 1: Download the latest dataset and metadata from Kaggle
-    print("Downloading dataset metadata from Kaggle...")
-    download_latest_metadata(dataset_slug)  # Download metadata to 'upload/'
-    
     print("Downloading dataset from Kaggle...")
     download_latest_dataset(dataset_slug)  # Download dataset to 'upload/'
 
