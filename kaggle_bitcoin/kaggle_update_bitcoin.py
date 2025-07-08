@@ -31,10 +31,21 @@ def download_latest_dataset(dataset_slug):
 
 
 # Check for missing data
+
 def check_missing_data(existing_data_filename):
     df = pd.read_csv(existing_data_filename)
-    df["Timestamp"] = pd.to_numeric(df["Timestamp"], errors="coerce")
-    last_timestamp = df["Timestamp"].max()
+
+    if "Timestamp" not in df.columns or df.empty:
+        print("⚠️ CSV is empty or missing 'Timestamp'. Starting fresh from Jan 1, 2012.")
+        last_timestamp = int(datetime(2012, 1, 1, tzinfo=timezone.utc).timestamp())
+    else:
+        df["Timestamp"] = pd.to_numeric(df["Timestamp"], errors="coerce")
+        if df["Timestamp"].dropna().empty:
+            print("⚠️ All Timestamps are NaN. Starting fresh from Jan 1, 2012.")
+            last_timestamp = int(datetime(2012, 1, 1, tzinfo=timezone.utc).timestamp())
+        else:
+            last_timestamp = df["Timestamp"].max()
+
     current_time = datetime.now(timezone.utc) - timedelta(minutes=10)
     current_timestamp = int(current_time.timestamp())
 
@@ -48,7 +59,6 @@ def check_missing_data(existing_data_filename):
     else:
         print("Dataset is up to date.")
         return None, None
-
 
 # Fetch and append missing data
 def fetch_and_append_missing_data(currency_pair, last_timestamp, current_timestamp, existing_data_filename, output_filename):
