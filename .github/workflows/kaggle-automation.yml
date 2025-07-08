@@ -2,7 +2,7 @@ name: Fetch and Merge Crypto Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Every day at 00:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -27,9 +27,12 @@ jobs:
 
       - name: Setup Kaggle API
         run: |
-          mkdir -p $HOME/.kaggle
-          echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > $HOME/.kaggle/kaggle.json
-          chmod 600 $HOME/.kaggle/kaggle.json
+          mkdir -p ~/.kaggle
+          echo "{\"username\":\"$KAGGLE_USERNAME\",\"key\":\"$KAGGLE_KEY\"}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
 
       - name: Run data processing script
         run: uv run python kaggle_bitcoin/kaggle_update_bitcoin.py
@@ -38,3 +41,4 @@ jobs:
         run: |
           utc_date=$(date -u +"%Y-%m-%d")
           uv run kaggle datasets version -m "Automated daily update for $utc_date" -p ./upload --dir-mode zip
+
