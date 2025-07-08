@@ -186,7 +186,7 @@ if __name__ == "__main__":
         os.makedirs(upload_dir)
 
     existing_data_filename = os.path.join(
-        upload_dir, "BTCKAGGLE.csv"
+        upload_dir, "btc-price.csv"
     )  # The dataset file
     output_filename = existing_data_filename  # Output filename (same as the dataset name on Kaggle)
 
